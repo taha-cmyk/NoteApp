@@ -13,7 +13,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AppViewModel @Inject constructor(
-private val note_repo : INoteRepository
+    private val userPreference: UserPreference,
+    private val note_repo : INoteRepository
 
 ) : ViewModel() {
 
@@ -51,11 +52,18 @@ private val note_repo : INoteRepository
 
 
     fun updateTheme(theme: Theme) {
-        _appState.value = _appState.value.copy(theme = theme)
+        viewModelScope.launch {
+            userPreference.saveUserTheme(theme.toString())
+            _appState.value = _appState.value.copy(theme = theme)
+        }
     }
 
     fun updateFont(font: Font) {
-        _appState.value = _appState.value.copy(font = font)
+        viewModelScope.launch {
+            userPreference.saveUserFont(font.toString())
+            _appState.value = _appState.value.copy(font = font)
+
+        }
     }
 
     fun updateFontSize(fontSize: FontSize) {

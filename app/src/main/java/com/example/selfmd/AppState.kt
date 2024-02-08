@@ -12,7 +12,8 @@ data class AppState(
 
 
 enum class Theme {
-    LIGHT, DARK
+    LIGHT ,
+    DARK
 }
 
 enum class Font {

@@ -1,5 +1,6 @@
 package com.example.selfmd.presentation.screens
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -10,6 +11,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.AddCircle
+import androidx.compose.material.icons.rounded.Face
 import androidx.compose.material.icons.rounded.Favorite
 import androidx.compose.material.icons.rounded.FavoriteBorder
 import androidx.compose.material.icons.rounded.Refresh
@@ -29,10 +31,12 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.selfmd.AppViewModel
+import com.example.selfmd.Theme
 import com.example.selfmd.navigation.AppScreens
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -43,13 +47,20 @@ fun HomeScreen(
 ) {
 
     val appState by viewModel.appState.collectAsState()
+    val context = LocalContext.current
+
 
 
     Column {
         HomeTopBar(
             onSettingsClicked = { navHostController.navigate(AppScreens.Settings.route) },
             onAddClicked = {navHostController.navigate(AppScreens.Editor.route)},
-            onRefreshClicked = {viewModel.refresh()}
+            onRefreshClicked = {viewModel.refresh()},
+            onThemeChanged = {
+                viewModel.updateTheme(Theme.LIGHT)
+                Toast.makeText(context, "Theme chaged To ${appState.theme}", Toast.LENGTH_SHORT).show()
+
+            }
         )
         if(appState.isLoading) LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
 
@@ -109,7 +120,12 @@ fun HomeScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeTopBar(onSettingsClicked : ()->Unit,onAddClicked : ()->Unit,onRefreshClicked:()->Unit) {
+fun HomeTopBar(
+    onSettingsClicked : ()->Unit,
+    onAddClicked : ()->Unit,
+    onRefreshClicked:()->Unit,
+    onThemeChanged:()->Unit
+) {
     TopAppBar(title = {
         Text(text = "Home")
     },
@@ -123,6 +139,10 @@ fun HomeTopBar(onSettingsClicked : ()->Unit,onAddClicked : ()->Unit,onRefreshCli
 
             IconButton(onClick = { onAddClicked() }) {
                 Icon(imageVector = Icons.Rounded.AddCircle, contentDescription = null)
+            }
+
+            IconButton(onClick = { onThemeChanged() }) {
+                Icon(imageVector = Icons.Rounded.Face, contentDescription = null)
             }
 
         })
