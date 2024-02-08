@@ -8,13 +8,18 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.navigation.NavHostController
+import com.example.selfmd.AppViewModel
 import com.example.selfmd.navigation.AppScreens
 import com.example.selfmd.presentation.shared.components.ScafforldLayout
 import com.example.selfmd.presentation.shared.components.TopBar
 
 
 @Composable
-fun SettingsSreen(navHostController: NavHostController) {
+fun SettingsSreen(
+    navHostController: NavHostController,
+    viewModel: AppViewModel
+
+) {
     ScafforldLayout(
         topBar = { SettingsTopBar(onBackClicked = {navHostController.navigate(AppScreens.Home.route)}) },
 

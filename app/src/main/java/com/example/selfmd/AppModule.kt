@@ -24,7 +24,8 @@ object AppModule {
             appContext,
             NoteDatabase::class.java,
             "note-database"
-        ).build()
+        ).fallbackToDestructiveMigration()
+         .build()
     }
 
     @Provides
@@ -32,5 +33,6 @@ object AppModule {
     fun provideNoteDao(noteDatabase: NoteDatabase): NoteDao {
         return noteDatabase.noteDao()
     }
+
 
 }
