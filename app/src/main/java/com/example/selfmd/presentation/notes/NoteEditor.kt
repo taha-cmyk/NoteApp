@@ -7,6 +7,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.unit.sp
 import com.example.selfmd.data.notes.CreateNoteViewModel
 
 @Composable
@@ -19,6 +21,7 @@ fun NoteEditor(
     Column {
 
         BasicTextField(
+            textStyle= TextStyle(fontSize = 20.sp),
             readOnly = uiState.isReadingMode,
             modifier = Modifier.fillMaxSize(),
             value = uiState.content,

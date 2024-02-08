@@ -34,7 +34,17 @@ private val note_repo : INoteRepository
     fun refresh() {
         _appState.value = _appState.value.copy(isLoading = true)
         viewModelScope.launch(Dispatchers.IO) {
+            //Thread.sleep(2000)
             val notes = note_repo.getAllNotesStream()
+            _appState.value = _appState.value.copy(notes = notes,isLoading = false)
+        }
+    }
+
+    fun getFavorites() {
+        _appState.value = _appState.value.copy(isLoading = true)
+        viewModelScope.launch(Dispatchers.IO) {
+            //Thread.sleep(2000)
+            val notes = note_repo.getFavoriteNotes()
             _appState.value = _appState.value.copy(notes = notes,isLoading = false)
         }
     }
@@ -62,8 +72,6 @@ private val note_repo : INoteRepository
             }
         }
     }
-
-
 
 
 

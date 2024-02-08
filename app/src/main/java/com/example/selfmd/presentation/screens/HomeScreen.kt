@@ -9,9 +9,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.rounded.AddCircle
 import androidx.compose.material.icons.rounded.Favorite
+import androidx.compose.material.icons.rounded.FavoriteBorder
 import androidx.compose.material.icons.rounded.Refresh
 import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material3.Card
@@ -19,6 +19,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -50,14 +51,13 @@ fun HomeScreen(
             onAddClicked = {navHostController.navigate(AppScreens.Editor.route)},
             onRefreshClicked = {viewModel.refresh()}
         )
+        if(appState.isLoading) LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
+
         Row {
-            TextButton(onClick = { /*TODO*/ }) {
+            TextButton(onClick = { viewModel.refresh() }) {
                 Text(text = "All")
             }
-            TextButton(onClick = { /*TODO*/ }) {
-                Text(text = "Today")
-            }
-            TextButton(onClick = { /*TODO*/ }) {
+            TextButton(onClick = { viewModel.getFavorites() }) {
                 Text(text = "Favorite")
             }
 
@@ -87,12 +87,13 @@ fun HomeScreen(
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
                             Text(text = title, fontSize = 25.sp)
-                            var imageVector = Icons.Rounded.Favorite
-                            if (note.isFavorite) imageVector = Icons.Outlined.FavoriteBorder
+
                             IconButton(onClick = {
                                 viewModel.updateNoteIsFavorite(note.id)
                             }) {
-                                Icon(imageVector = imageVector, contentDescription = null)
+                                Icon(imageVector = if (note.isFavorite) {
+                                    Icons.Rounded.Favorite
+                                } else Icons.Rounded.FavoriteBorder , contentDescription = null)
                             }
                         }
                         Text(text = content)
